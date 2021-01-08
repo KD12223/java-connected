@@ -7,13 +7,11 @@ import com.kylerdeggs.javaconnected.repository.CommentRepository;
 import com.kylerdeggs.javaconnected.web.CommentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,7 +20,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a comment.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.1.0
  */
 @Service
 public class CommentService {
@@ -54,7 +52,7 @@ public class CommentService {
     /**
      * Retrieves all comments.
      *
-     * @return A list of all comments
+     * @return List of all comments
      */
     public List<Comment> allComments() {
         return commentRepository.findByPublishedTrue();
@@ -64,12 +62,22 @@ public class CommentService {
      * Retrieves all comments by a specific user.
      *
      * @param authorId ID of the target user
-     * @return A list of comments by the target user
+     * @return List of comments by the target user
      */
     public List<Comment> allCommentsByUser(String authorId) {
         User author = userService.verifyUser(authorId);
 
         return commentRepository.findAllByAuthorAndPublishedTrue(author);
+    }
+
+    /**
+     * Retrieves all comments that relate to a specific post.
+     *
+     * @param post Target post
+     * @return List of comments for a specific post
+     */
+    public List<Comment> allCommentsForPost(Post post) {
+        return commentRepository.findAllByPostAndPublishedTrue(post);
     }
 
     /**
@@ -92,6 +100,15 @@ public class CommentService {
      */
     public boolean commentExists(long commentId) {
         return commentRepository.findByIdAndPublishedTrue(commentId).isPresent();
+    }
+
+    /**
+     * Saves a comment.
+     *
+     * @param comment Comment to save
+     */
+    public void saveComment(Comment comment) {
+        commentRepository.save(comment);
     }
 
     /**
@@ -131,36 +148,5 @@ public class CommentService {
      */
     private Optional<Comment> findComment(long commentId) {
         return commentRepository.findByIdAndPublishedTrue(commentId);
-    }
-
-    /**
-     * Creates new comments by consuming the comment creation queue.
-     *
-     * @param commentDto Comment to be created
-     */
-    @RabbitListener(queues = "${amqp.queue.comment-name}")
-    private void commentCreator(CommentDto commentDto) {
-        User author = userService.verifyUser(commentDto.getAuthorId());
-        Post post = postService.verifyPost(commentDto.getPostId());
-        Comment comment = new Comment(post, author, commentDto.getCaption(), true, LocalDateTime.now());
-
-        commentRepository.save(comment);
-        LOGGER.info("A new comment with ID " + comment.getId() + " has been created");
-    }
-
-    /**
-     * Deletes comments by consuming the comment deletion queue.
-     *
-     * @param commentId Comment to be deleted
-     */
-    @RabbitListener(queues = "${amqp.queue.comment-delete-name}")
-    private void commentDeleter(long commentId) {
-        Comment targetComment = verifyComment(commentId);
-
-        targetComment.setPublished(false);
-        targetComment.setDeletedAt(LocalDateTime.now());
-
-        commentRepository.save(targetComment);
-        LOGGER.info("Comment " + commentId + " has been unpublished");
     }
 }

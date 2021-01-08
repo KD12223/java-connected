@@ -1,6 +1,7 @@
 package com.kylerdeggs.javaconnected.repository;
 
 import com.kylerdeggs.javaconnected.domain.Comment;
+import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Queries
      * @return List of published comments from the specified user
      */
     List<Comment> findAllByAuthorAndPublishedTrue(User author);
+
+    /**
+     * Finds all published comments that correspond to a post.
+     *
+     * @param post Post to find the comments from
+     * @return List of published comments for a specific post
+     */
+    List<Comment> findAllByPostAndPublishedTrue(Post post);
 
     /**
      * Finds a published comment with the specified ID.
