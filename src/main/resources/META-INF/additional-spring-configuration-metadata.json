@@ -1,0 +1,49 @@
+{
+  "properties": [
+    {
+      "name": "amqp.exchange.name",
+      "type": "java.lang.String",
+      "description": "RabbitMQ exchange name."
+    },
+    {
+      "name": "amqp.queue.post-name",
+      "type": "java.lang.String",
+      "description": "Name for the Post queue."
+    },
+    {
+      "name": "amqp.queue.post-delete-name",
+      "type": "java.lang.String",
+      "description": "Name for the Post deletion queue."
+    },
+    {
+      "name": "amqp.queue.comment-name",
+      "type": "java.lang.String",
+      "description": "Name for the Comment queue."
+    },
+    {
+      "name": "amqp.queue.comment-delete-name",
+      "type": "java.lang.String",
+      "description": "Name for the comment deletion queue."
+    },
+    {
+      "name": "amqp.queue.like-name",
+      "type": "java.lang.String",
+      "description": "Name for the Like queue."
+    },
+    {
+      "name": "aws.credentials.access-key",
+      "type": "java.lang.String",
+      "description": "AWS access key."
+    },
+    {
+      "name": "aws.credentials.secret-key",
+      "type": "java.lang.String",
+      "description": "AWS secret key."
+    },
+    {
+      "name": "aws.bucket.name",
+      "type": "java.lang.String",
+      "description": "AWS bucket name."
+    }
+  ]
+}
