@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * RabbitMQ service that consumes all queues.
@@ -78,7 +77,6 @@ public class QueueConsumerService {
     @RabbitListener(queues = "${amqp.queue.post-delete-name}")
     private void postDeleter(long postId) {
         Post targetPost = postService.verifyPost(postId);
-        List<Comment> commentList = commentService.allCommentsForPost(targetPost);
 
         if (targetPost.getHasMedia()) {
             postService.deleteMedia(targetPost.getMediaLocation());
@@ -87,7 +85,8 @@ public class QueueConsumerService {
         }
         targetPost.setPublished(false);
         targetPost.setDeletedAt(LocalDateTime.now());
-        commentList.forEach(comment -> commentService.processCommentDeletion(comment.getId()));
+        commentService.allCommentsForPost(targetPost)
+                .forEach(comment -> commentService.processCommentDeletion(comment.getId()));
 
         postService.savePost(targetPost);
         LOGGER.info("Post " + postId + " has been unpublished");
