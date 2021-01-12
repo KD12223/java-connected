@@ -72,6 +72,12 @@ public class PostController {
         return exception.getMessage();
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public String return403(UnsupportedOperationException exception) {
+        return exception.getMessage();
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IOException.class)
     public String return500(IOException exception) {

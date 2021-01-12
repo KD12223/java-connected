@@ -50,4 +50,10 @@ public class CommentController {
     public String return404(NoSuchElementException exception) {
         return exception.getMessage();
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public String return403(UnsupportedOperationException exception) {
+        return exception.getMessage();
+    }
 }

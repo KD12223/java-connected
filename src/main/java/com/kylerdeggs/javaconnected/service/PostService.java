@@ -4,6 +4,7 @@ import com.kylerdeggs.javaconnected.configuration.AWSConfig;
 import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.PostRepository;
+import com.kylerdeggs.javaconnected.security.UserSecurityContext;
 import com.kylerdeggs.javaconnected.web.PostDto;
 import org.apache.tika.mime.MimeTypeException;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a post.
  *
  * @author Kyler Deggs
- * @version 1.1.0
+ * @version 1.2.0
  */
 @Service
 public class PostService {
@@ -140,7 +141,9 @@ public class PostService {
      * @throws MimeTypeException Trying to upload a restricted file type
      */
     public void processPost(PostDto postDto, MultipartFile media) throws IOException, MimeTypeException {
-        if (userService.userExists(postDto.getAuthorId())) {
+        String userId = new UserSecurityContext(userService).getUser().getId();
+
+        if (userId.equals(postDto.getAuthorId())) {
             if (media != null && !media.isEmpty())
                 postDto.setMediaLocation(saveMedia(postDto.getAuthorId(), media));
 
@@ -148,7 +151,8 @@ public class PostService {
                     + " to be routed to the queue " + postQueueName);
             rabbitTemplate.convertAndSend(postQueueName, postDto);
         } else
-            throw new NoSuchElementException("A user with ID " + postDto.getAuthorId() + " does not exist");
+            throw new UnsupportedOperationException("The post is trying to be created with an author ID of "
+                    + postDto.getAuthorId() + " but the current user has an ID of " + userId);
     }
 
     /**
@@ -174,12 +178,15 @@ public class PostService {
      * @param postId ID of the target post
      */
     public void processPostDeletion(long postId) {
-        if (postExists(postId)) {
+        String userId = new UserSecurityContext(userService).getUser().getId();
+
+        if (userId.equals(verifyPost(postId).getAuthor().getId())) {
             LOGGER.info("A post deletion is being sent to exchange " + exchangeName
                     + " to be routed to the queue " + likeQueueName);
             rabbitTemplate.convertAndSend(postDeletionQueueName, postId);
         } else
-            throw new NoSuchElementException("A post with ID " + postId + " does not exist");
+            throw new UnsupportedOperationException("The post trying to be deleted was not created by "
+                    + "the requesting user");
     }
 
     /**
