@@ -6,6 +6,7 @@ import com.kylerdeggs.javaconnected.service.PostService;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,25 +40,32 @@ public class PostController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void createPost(@RequestParam(value = "media", required = false) MultipartFile media,
-                           @RequestParam(value = "post") String postInformation) throws IOException, MimeTypeException {
+    public ResponseEntity<HttpResponse> createPost(@RequestParam(value = "media", required = false) MultipartFile media,
+                                                   @RequestParam(value = "post") String postInformation) throws IOException, MimeTypeException {
         PostDto postDto = new ObjectMapper().readValue(postInformation, PostDto.class);
 
         postService.processPost(postDto, media);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Post creation request has been accepted"));
     }
 
     @PatchMapping(path = "/likes")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void modifyLikes(@RequestParam(value = "postId") long postId,
-                            @RequestParam(value = "addLike") boolean addLike) {
+    public ResponseEntity<HttpResponse> modifyLikes(@RequestParam(value = "postId") long postId,
+                                                    @RequestParam(value = "addLike") boolean addLike) {
         postService.processLike(postId, addLike);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Like " + (addLike ? "creation" : "deletion") + " request for post "
+                        + postId + " has been accepted"));
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deletePost(@PathVariable(value = "id") long postId) {
+    public ResponseEntity<HttpResponse> deletePost(@PathVariable(value = "id") long postId) {
         postService.processPostDeletion(postId);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Post deletion request for post " + postId + " has been accepted"));
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

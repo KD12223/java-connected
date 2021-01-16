@@ -165,7 +165,7 @@ public class PostService {
         LikeDto likeDto = new LikeDto(postId, addLike);
 
         if (postExists(likeDto.getPostId())) {
-            LOGGER.info("A new like is being sent to the exchange " + exchangeName
+            LOGGER.info("A like message is being sent to the exchange " + exchangeName
                     + " to be routed to the queue " + likeQueueName);
             rabbitTemplate.convertAndSend(likeQueueName, likeDto);
         } else

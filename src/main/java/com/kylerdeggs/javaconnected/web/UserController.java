@@ -4,6 +4,7 @@ import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +37,11 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@RequestBody @Validated UserDto user) {
+    public ResponseEntity<HttpResponse> createUser(@RequestBody @Validated UserDto user) {
         userService.createUser(user);
+
+        return new ResponseEntity<>(new HttpResponse(HttpStatus.CREATED.getReasonPhrase(),
+                "New user created"), HttpStatus.CREATED);
     }
 
     @PatchMapping(path = "/{id}")
