@@ -5,7 +5,7 @@ import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.CommentRepository;
 import com.kylerdeggs.javaconnected.security.UserSecurityContext;
-import com.kylerdeggs.javaconnected.web.CommentDto;
+import com.kylerdeggs.javaconnected.web.dtos.CommentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -147,6 +147,21 @@ public class CommentService {
         } else
             throw new SecurityException("The comment trying to be deleted was not created by "
                     + "the requesting user");
+    }
+
+    /**
+     * Processes an internal comment deletion request by sending the comment ID to the correct RabbitMQ queue.
+     * This method should not be used with external request as it provides no user verification.
+     *
+     * @param commentId ID of the target comment
+     */
+    protected void processCommentDeletionInternal(long commentId) {
+        if (commentExists(commentId)) {
+            LOGGER.info("A comment deletion is being sent to exchange " + exchangeName
+                    + " to be routed to the queue " + commentDeletionQueueName);
+            rabbitTemplate.convertAndSend(commentDeletionQueueName, commentId);
+        } else
+            throw new NoSuchElementException("A comment with ID " + commentId + " does not exist");
     }
 
     /**
