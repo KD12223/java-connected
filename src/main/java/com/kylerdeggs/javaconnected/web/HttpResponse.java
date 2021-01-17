@@ -2,6 +2,12 @@ package com.kylerdeggs.javaconnected.web;
 
 import java.time.LocalDateTime;
 
+/**
+ * HTTP response representation object.
+ *
+ * @author Kyler Deggs
+ * @version 1.0.0
+ */
 public class HttpResponse {
     private final LocalDateTime timeStamp;
 

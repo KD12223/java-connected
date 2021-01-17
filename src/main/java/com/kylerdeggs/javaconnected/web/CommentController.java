@@ -9,8 +9,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * Controller to handle all requests pertaining to a comment.
+ *
+ * @author Kyler Deggs
+ * @version 1.2.0
+ */
 @RestController
 @RequestMapping(path = "v1/api/comments")
 public class CommentController {
@@ -50,17 +55,5 @@ public class CommentController {
 
         return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
                 "Comment deletion request for comment " + commentId + " has been accepted"));
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchElementException.class)
-    public String return404(NoSuchElementException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(UnsupportedOperationException.class)
-    public String return403(UnsupportedOperationException exception) {
-        return exception.getMessage();
     }
 }

@@ -21,7 +21,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a comment.
  *
  * @author Kyler Deggs
- * @version 1.2.0
+ * @version 1.2.1
  */
 @Service
 public class CommentService {
@@ -128,7 +128,7 @@ public class CommentService {
             } else
                 throw new NoSuchElementException("A post with ID " + commentDto.getPostId() + " does not exist");
         } else
-            throw new UnsupportedOperationException("The comment is trying to be created with an author ID of "
+            throw new SecurityException("The comment is trying to be created with an author ID of "
                     + commentDto.getAuthorId() + " but the current user has an ID of " + userId);
     }
 
@@ -145,7 +145,7 @@ public class CommentService {
                     + " to be routed to the queue " + commentDeletionQueueName);
             rabbitTemplate.convertAndSend(commentDeletionQueueName, commentId);
         } else
-            throw new UnsupportedOperationException("The comment trying to be deleted was not created by "
+            throw new SecurityException("The comment trying to be deleted was not created by "
                     + "the requesting user");
     }
 

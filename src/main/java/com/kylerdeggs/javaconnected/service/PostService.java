@@ -26,7 +26,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a post.
  *
  * @author Kyler Deggs
- * @version 1.2.0
+ * @version 1.2.1
  */
 @Service
 public class PostService {
@@ -151,7 +151,7 @@ public class PostService {
                     + " to be routed to the queue " + postQueueName);
             rabbitTemplate.convertAndSend(postQueueName, postDto);
         } else
-            throw new UnsupportedOperationException("The post is trying to be created with an author ID of "
+            throw new SecurityException("The post is trying to be created with an author ID of "
                     + postDto.getAuthorId() + " but the current user has an ID of " + userId);
     }
 
@@ -185,7 +185,7 @@ public class PostService {
                     + " to be routed to the queue " + likeQueueName);
             rabbitTemplate.convertAndSend(postDeletionQueueName, postId);
         } else
-            throw new UnsupportedOperationException("The post trying to be deleted was not created by "
+            throw new SecurityException("The post trying to be deleted was not created by "
                     + "the requesting user");
     }
 

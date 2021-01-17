@@ -12,8 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * Controller to handle all requests pertaining to a post.
+ *
+ * @author Kyler Deggs
+ * @version 1.2.0
+ */
 @RestController
 @RequestMapping(path = "v1/api/posts")
 public class PostController {
@@ -66,29 +71,5 @@ public class PostController {
 
         return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
                 "Post deletion request for post " + postId + " has been accepted"));
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchElementException.class)
-    public String return404(NoSuchElementException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String return415(IllegalArgumentException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(UnsupportedOperationException.class)
-    public String return403(UnsupportedOperationException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IOException.class)
-    public String return500(IOException exception) {
-        return exception.getMessage();
     }
 }
