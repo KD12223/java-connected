@@ -2,7 +2,7 @@ package com.kylerdeggs.javaconnected.service;
 
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.UserRepository;
-import com.kylerdeggs.javaconnected.web.UserDto;
+import com.kylerdeggs.javaconnected.web.dtos.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

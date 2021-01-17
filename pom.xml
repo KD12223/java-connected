@@ -59,8 +59,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.11.930</version>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.939</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>

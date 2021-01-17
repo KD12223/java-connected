@@ -5,7 +5,7 @@ import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.CommentRepository;
 import com.kylerdeggs.javaconnected.security.UserSecurityContext;
-import com.kylerdeggs.javaconnected.web.CommentDto;
+import com.kylerdeggs.javaconnected.web.dtos.CommentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
