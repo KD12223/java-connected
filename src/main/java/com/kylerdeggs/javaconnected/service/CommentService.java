@@ -150,6 +150,21 @@ public class CommentService {
     }
 
     /**
+     * Processes an internal comment deletion request by sending the comment ID to the correct RabbitMQ queue.
+     * This method should not be used with external request as it provides no user verification.
+     *
+     * @param commentId ID of the target comment
+     */
+    protected void processCommentDeletionInternal(long commentId) {
+        if (commentExists(commentId)) {
+            LOGGER.info("A comment deletion is being sent to exchange " + exchangeName
+                    + " to be routed to the queue " + commentDeletionQueueName);
+            rabbitTemplate.convertAndSend(commentDeletionQueueName, commentId);
+        } else
+            throw new NoSuchElementException("A comment with ID " + commentId + " does not exist");
+    }
+
+    /**
      * Helper method that searches for a specified comment.
      *
      * @param commentId ID of the target comment
