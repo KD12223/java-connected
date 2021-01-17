@@ -86,7 +86,7 @@ public class QueueConsumerService {
         targetPost.setPublished(false);
         targetPost.setDeletedAt(LocalDateTime.now());
         commentService.allCommentsForPost(targetPost)
-                .forEach(comment -> commentService.processCommentDeletion(comment.getId()));
+                .forEach(comment -> commentService.processCommentDeletionInternal(comment.getId()));
 
         postService.savePost(targetPost);
         LOGGER.info("Post " + postId + " has been unpublished");
