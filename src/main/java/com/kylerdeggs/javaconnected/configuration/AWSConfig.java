@@ -74,7 +74,7 @@ public class AWSConfig {
             s3Client.putObject(bucketName, key, media.getInputStream(), null);
             LOGGER.info("Media has been added to S3 at s3://" + bucketName + "/" + key);
         } else
-            throw new IllegalArgumentException("The media type must be an image or video");
+            throw new UnsupportedOperationException("The media type must be an image or video");
 
 
         return key;

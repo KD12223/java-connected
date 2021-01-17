@@ -4,6 +4,7 @@ import com.kylerdeggs.javaconnected.domain.Comment;
 import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.CommentRepository;
+import com.kylerdeggs.javaconnected.security.UserSecurityContext;
 import com.kylerdeggs.javaconnected.web.CommentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a comment.
  *
  * @author Kyler Deggs
- * @version 1.1.0
+ * @version 1.2.1
  */
 @Service
 public class CommentService {
@@ -117,13 +118,18 @@ public class CommentService {
      * @param commentDto Comment to be created
      */
     public void processComment(CommentDto commentDto) {
-        if (userService.userExists(commentDto.getAuthorId()) && postService.postExists(commentDto.getPostId())) {
-            LOGGER.info("A new comment is being sent to the exchange " + exchangeName
-                    + " to be routed to the queue " + commentQueueName);
-            rabbitTemplate.convertAndSend(commentQueueName, commentDto);
+        String userId = new UserSecurityContext(userService).getUser().getId();
+
+        if (userId.equals(commentDto.getAuthorId())) {
+            if (postService.postExists(commentDto.getPostId())) {
+                LOGGER.info("A new comment is being sent to the exchange " + exchangeName
+                        + " to be routed to the queue " + commentQueueName);
+                rabbitTemplate.convertAndSend(commentQueueName, commentDto);
+            } else
+                throw new NoSuchElementException("A post with ID " + commentDto.getPostId() + " does not exist");
         } else
-            throw new NoSuchElementException("A user or post with ID " +
-                    commentDto.getAuthorId() + "/" + commentDto.getPostId() + " does not exist");
+            throw new SecurityException("The comment is trying to be created with an author ID of "
+                    + commentDto.getAuthorId() + " but the current user has an ID of " + userId);
     }
 
     /**
@@ -132,12 +138,15 @@ public class CommentService {
      * @param commentId ID of the target comment
      */
     public void processCommentDeletion(long commentId) {
-        if (commentExists(commentId)) {
+        String userId = new UserSecurityContext(userService).getUser().getId();
+
+        if (userId.equals(verifyComment(commentId).getAuthor().getId())) {
             LOGGER.info("A comment deletion is being sent to exchange " + exchangeName
                     + " to be routed to the queue " + commentDeletionQueueName);
             rabbitTemplate.convertAndSend(commentDeletionQueueName, commentId);
         } else
-            throw new NoSuchElementException("A comment with ID " + commentId + " does not exist");
+            throw new SecurityException("The comment trying to be deleted was not created by "
+                    + "the requesting user");
     }
 
     /**

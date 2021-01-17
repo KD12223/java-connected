@@ -4,12 +4,18 @@ import com.kylerdeggs.javaconnected.domain.Comment;
 import com.kylerdeggs.javaconnected.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * Controller to handle all requests pertaining to a comment.
+ *
+ * @author Kyler Deggs
+ * @version 1.2.0
+ */
 @RestController
 @RequestMapping(path = "v1/api/comments")
 public class CommentController {
@@ -36,18 +42,18 @@ public class CommentController {
     }
 
     @PostMapping
-    public void createComment(@RequestBody @Validated CommentDto comment) {
+    public ResponseEntity<HttpResponse> createComment(@RequestBody @Validated CommentDto comment) {
         commentService.processComment(comment);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Comment creation request has been accepted"));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteComment(@PathVariable(value = "id") long commentId) {
+    public ResponseEntity<HttpResponse> deleteComment(@PathVariable(value = "id") long commentId) {
         commentService.processCommentDeletion(commentId);
-    }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchElementException.class)
-    public String return404(NoSuchElementException exception) {
-        return exception.getMessage();
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Comment deletion request for comment " + commentId + " has been accepted"));
     }
 }

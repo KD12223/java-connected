@@ -6,13 +6,19 @@ import com.kylerdeggs.javaconnected.service.PostService;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * Controller to handle all requests pertaining to a post.
+ *
+ * @author Kyler Deggs
+ * @version 1.2.0
+ */
 @RestController
 @RequestMapping(path = "v1/api/posts")
 public class PostController {
@@ -39,42 +45,31 @@ public class PostController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void createPost(@RequestParam(value = "media", required = false) MultipartFile media,
-                           @RequestParam(value = "post") String postInformation) throws IOException, MimeTypeException {
+    public ResponseEntity<HttpResponse> createPost(@RequestParam(value = "media", required = false) MultipartFile media,
+                                                   @RequestParam(value = "post") String postInformation) throws IOException, MimeTypeException {
         PostDto postDto = new ObjectMapper().readValue(postInformation, PostDto.class);
 
         postService.processPost(postDto, media);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Post creation request has been accepted"));
     }
 
     @PatchMapping(path = "/likes")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void modifyLikes(@RequestParam(value = "postId") long postId,
-                            @RequestParam(value = "addLike") boolean addLike) {
+    public ResponseEntity<HttpResponse> modifyLikes(@RequestParam(value = "postId") long postId,
+                                                    @RequestParam(value = "addLike") boolean addLike) {
         postService.processLike(postId, addLike);
+
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Like " + (addLike ? "creation" : "deletion") + " request for post "
+                        + postId + " has been accepted"));
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deletePost(@PathVariable(value = "id") long postId) {
+    public ResponseEntity<HttpResponse> deletePost(@PathVariable(value = "id") long postId) {
         postService.processPostDeletion(postId);
-    }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchElementException.class)
-    public String return404(NoSuchElementException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String return415(IllegalArgumentException exception) {
-        return exception.getMessage();
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IOException.class)
-    public String return500(IOException exception) {
-        return exception.getMessage();
+        return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),
+                "Post deletion request for post " + postId + " has been accepted"));
     }
 }
