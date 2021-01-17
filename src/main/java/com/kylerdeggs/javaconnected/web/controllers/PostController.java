@@ -1,8 +1,10 @@
-package com.kylerdeggs.javaconnected.web;
+package com.kylerdeggs.javaconnected.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.service.PostService;
+import com.kylerdeggs.javaconnected.web.HttpResponse;
+import com.kylerdeggs.javaconnected.web.dtos.PostDto;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

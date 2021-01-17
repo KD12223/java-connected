@@ -1,4 +1,4 @@
-package com.kylerdeggs.javaconnected.web;
+package com.kylerdeggs.javaconnected.web.dtos;
 
 import org.hibernate.validator.constraints.Length;
 

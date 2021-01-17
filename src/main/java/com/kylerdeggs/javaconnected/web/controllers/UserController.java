@@ -1,7 +1,9 @@
-package com.kylerdeggs.javaconnected.web;
+package com.kylerdeggs.javaconnected.web.controllers;
 
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.service.UserService;
+import com.kylerdeggs.javaconnected.web.HttpResponse;
+import com.kylerdeggs.javaconnected.web.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

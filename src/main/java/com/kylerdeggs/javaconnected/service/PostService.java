@@ -5,7 +5,7 @@ import com.kylerdeggs.javaconnected.domain.Post;
 import com.kylerdeggs.javaconnected.domain.User;
 import com.kylerdeggs.javaconnected.repository.PostRepository;
 import com.kylerdeggs.javaconnected.security.UserSecurityContext;
-import com.kylerdeggs.javaconnected.web.PostDto;
+import com.kylerdeggs.javaconnected.web.dtos.PostDto;
 import org.apache.tika.mime.MimeTypeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
