@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
  * Configuration class and methods that are enabled for AWS.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Configuration
 public class AWSConfig {
@@ -32,13 +32,13 @@ public class AWSConfig {
 
     private AmazonS3 s3Client;
 
-    @Value(value = "${aws.bucket.name}")
+    @Value("${aws.bucket.name}")
     private String bucketName;
 
-    @Value(value = "${aws.credentials.access-key}")
+    @Value("${aws.credentials.access-key}")
     private String accessKey;
 
-    @Value(value = "${aws.credentials.secret-key}")
+    @Value("${aws.credentials.secret-key}")
     private String secretKey;
 
     @PostConstruct

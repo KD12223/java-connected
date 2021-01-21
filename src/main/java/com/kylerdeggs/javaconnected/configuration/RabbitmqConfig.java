@@ -32,7 +32,7 @@ public class RabbitmqConfig {
     @Value("${amqp.queue.comment-name}")
     private String commentQueueName;
 
-    @Value(value = "${amqp.queue.comment-delete-name}")
+    @Value("${amqp.queue.comment-delete-name}")
     private String commentDeletionQueueName;
 
     @Value("${amqp.queue.like-name}")

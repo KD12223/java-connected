@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller to handle all requests pertaining to a user.
  *
  * @author Kyler Deggs
- * @version 1.3.0
+ * @version 1.3.1
  */
 @RestController
-@RequestMapping(path = "v1/api/users")
+@RequestMapping("v1/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -29,8 +29,8 @@ public class UserController {
         return userService.allUsers();
     }
 
-    @GetMapping(path = "/{id}")
-    public User getUser(@PathVariable(value = "id") String userId) {
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable("id") String userId) {
         return userService.verifyUser(userId);
     }
 }

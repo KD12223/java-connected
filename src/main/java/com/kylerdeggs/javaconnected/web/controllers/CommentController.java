@@ -16,10 +16,10 @@ import java.util.List;
  * Controller to handle all requests pertaining to a comment.
  *
  * @author Kyler Deggs
- * @version 1.2.0
+ * @version 1.2.1
  */
 @RestController
-@RequestMapping(path = "v1/api/comments")
+@RequestMapping("v1/api/comments")
 public class CommentController {
     private final CommentService commentService;
 
@@ -33,13 +33,13 @@ public class CommentController {
         return commentService.allComments();
     }
 
-    @GetMapping(path = "/user/{id}")
-    public List<Comment> getAllCommentsByUser(@PathVariable(value = "id") String authorId) {
+    @GetMapping("/user/{id}")
+    public List<Comment> getAllCommentsByUser(@PathVariable("id") String authorId) {
         return commentService.allCommentsByUser(authorId);
     }
 
-    @GetMapping(path = "/{id}")
-    public Comment getComment(@PathVariable(value = "id") long commentId) {
+    @GetMapping("/{id}")
+    public Comment getComment(@PathVariable("id") long commentId) {
         return commentService.verifyComment(commentId);
     }
 
@@ -51,8 +51,8 @@ public class CommentController {
                 "Comment creation request has been accepted"));
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<HttpResponse> deleteComment(@PathVariable(value = "id") long commentId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpResponse> deleteComment(@PathVariable("id") long commentId) {
         commentService.processCommentDeletion(commentId);
 
         return ResponseEntity.accepted().body(new HttpResponse(HttpStatus.ACCEPTED.getReasonPhrase(),

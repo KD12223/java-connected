@@ -16,14 +16,14 @@ import java.util.Map;
  * Controller to handle Okta Event Hook requests.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.0.1
  */
 @RestController
-@RequestMapping(path = "v1/api/okta")
+@RequestMapping("v1/api/okta")
 public class OktaController {
     private final UserService userService;
 
-    @Value(value = "${okta.events.secret}")
+    @Value("${okta.events.secret}")
     private String eventAuthKey;
 
     @Autowired
@@ -60,9 +60,7 @@ public class OktaController {
      */
     private UserDto convertToUserDto(List<Object> oktaObject) {
         @SuppressWarnings("unchecked") final Map<String, Object> rawRequest = (Map<String, Object>) oktaObject.get(0);
-
         @SuppressWarnings("unchecked") final List<Object> target = (List<Object>) rawRequest.get("target");
-
         final OktaActor oktaActor = new ObjectMapper().convertValue(target.get(0), OktaActor.class);
         final String[] displayNameSplit = oktaActor.getDisplayName().split(" ");
 
