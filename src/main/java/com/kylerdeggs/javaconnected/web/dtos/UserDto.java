@@ -7,16 +7,23 @@ import javax.validation.constraints.Size;
  * User representation object.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class UserDto {
     @NotNull
-    private String id;
+    private final String id;
 
-    private String firstName, lastName, email;
+    private final String firstName, lastName, email;
 
     @Size(min = 10, max = 10)
     private String phone;
+
+    public UserDto(String id, String firstName, String lastName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     public String getId() {
         return id;

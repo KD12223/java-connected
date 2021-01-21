@@ -44,6 +44,11 @@
       "name": "aws.bucket.name",
       "type": "java.lang.String",
       "description": "AWS bucket name."
+    },
+    {
+      "name": "okta.events.secret",
+      "type": "java.lang.String",
+      "description": "Okta Event Hook authorization key."
     }
   ]
 }
