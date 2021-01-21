@@ -65,6 +65,18 @@ public class UserService {
     }
 
     /**
+     * Updates the last time a user has logged in.
+     *
+     * @param user Information of the user to update
+     */
+    public void updateSignIn(UserDto user) {
+        User original = verifyUser(user.getId());
+
+        original.setLastLogin(LocalDateTime.now());
+        userRepository.save(original);
+    }
+
+    /**
      * Updates a user with the specified new information
      *
      * @param updatedUser UserDto with updated information
