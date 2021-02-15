@@ -26,7 +26,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a post.
  *
  * @author Kyler Deggs
- * @version 1.2.1
+ * @version 1.2.2
  */
 @Service
 public class PostService {
@@ -43,10 +43,10 @@ public class PostService {
     @Value("${amqp.queue.post-name}")
     private String postQueueName;
 
-    @Value(value = "${amqp.queue.post-delete-name}")
+    @Value("${amqp.queue.post-delete-name}")
     private String postDeletionQueueName;
 
-    @Value(value = "${amqp.queue.like-name}")
+    @Value("${amqp.queue.like-name}")
     private String likeQueueName;
 
     @Autowired

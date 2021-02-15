@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * The fields of this class represent a user.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Entity
 @Table(name = "user")
@@ -37,7 +37,7 @@ public class User {
     @Column(name = "lastLogin", nullable = false)
     private LocalDateTime lastLogin;
 
-    protected User() {
+    public User() {
     }
 
     public User(String id, String firstName, String lastName, String phone, String email,

@@ -51,16 +51,6 @@ public class UserService {
     }
 
     /**
-     * Determines if a user with the specified ID exists.
-     *
-     * @param userId ID of the target user
-     * @return True if a user is found
-     */
-    public boolean userExists(String userId) {
-        return findUser(userId).isPresent();
-    }
-
-    /**
      * Creates a new user with the specified information.
      *
      * @param user Information of the new user
@@ -75,14 +65,24 @@ public class UserService {
     }
 
     /**
+     * Updates the last time a user has logged in.
+     *
+     * @param user Information of the user to update
+     */
+    public void updateSignIn(UserDto user) {
+        User original = verifyUser(user.getId());
+
+        original.setLastLogin(LocalDateTime.now());
+        userRepository.save(original);
+    }
+
+    /**
      * Updates a user with the specified new information
      *
-     * @param userId      ID of the target user
      * @param updatedUser UserDto with updated information
-     * @return The updated user
      */
-    public User updateUser(String userId, UserDto updatedUser) {
-        User original = verifyUser(userId);
+    public void updateUser(UserDto updatedUser) {
+        User original = verifyUser(updatedUser.getId());
 
         if (updatedUser.getFirstName() != null)
             original.setFirstName(updatedUser.getFirstName());
@@ -93,8 +93,8 @@ public class UserService {
         if (updatedUser.getEmail() != null)
             original.setEmail(updatedUser.getEmail());
 
-        LOGGER.info("Updating user details for user with ID: " + userId);
-        return userRepository.save(original);
+        LOGGER.info("Updating user details for user with ID: " + original.getId());
+        userRepository.save(original);
     }
 
     /**

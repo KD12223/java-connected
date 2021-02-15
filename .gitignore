@@ -32,5 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
-### Application Properties ###
-src/main/resources/application.properties
+### Elastic Beanstalk Files ###
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+### Environment Files ###
+*.env

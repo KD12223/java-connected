@@ -21,7 +21,7 @@ import java.util.Optional;
  * Provides methods for retrieving, creating, updating, and deleting a comment.
  *
  * @author Kyler Deggs
- * @version 1.2.1
+ * @version 1.2.2
  */
 @Service
 public class CommentService {
@@ -32,13 +32,13 @@ public class CommentService {
     private final PostService postService;
     private final UserService userService;
 
-    @Value(value = "${amqp.exchange.name}")
+    @Value("${amqp.exchange.name}")
     private String exchangeName;
 
-    @Value(value = "${amqp.queue.comment-name}")
+    @Value("${amqp.queue.comment-name}")
     private String commentQueueName;
 
-    @Value(value = "${amqp.queue.comment-delete-name}")
+    @Value("${amqp.queue.comment-delete-name}")
     private String commentDeletionQueueName;
 
     @Autowired

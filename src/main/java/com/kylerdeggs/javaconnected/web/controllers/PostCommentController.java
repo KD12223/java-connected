@@ -13,10 +13,10 @@ import java.util.List;
  * Controller to handle all requests for presenting a combination of post and comment information.
  *
  * @author Kyler Deggs
- * @version 1.0.0
+ * @version 1.0.1
  */
 @RestController
-@RequestMapping(path = "v1/api/posts_comments")
+@RequestMapping("v1/api/posts_comments")
 public class PostCommentController {
     private final PostCommentService postCommentService;
 
@@ -30,9 +30,9 @@ public class PostCommentController {
         return postCommentService.allPostsAndComments();
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public List<PostCommentService.PostCommentDto> getAllPostsByUserAndComments(
-            @PathVariable(value = "id") String authorId) {
+            @PathVariable("id") String authorId) {
         return postCommentService.allPostsByUserAndComments(authorId);
     }
 }
