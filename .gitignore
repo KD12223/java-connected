@@ -38,4 +38,4 @@ build/
 !.elasticbeanstalk/*.global.yml
 
 ### Environment Files ###
-/prod.env
+*.env
