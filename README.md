@@ -3,7 +3,7 @@
 This is a social media application API that provides blog like functionality. It allows users to post messages that have
 captions and can have either an image or video attached. Users can also like and comment on other posts.
 
-The application uses MySQL as database and RabbitMq for handling posts, likes, and comments. AWS S3 is also used to
+The application uses MySQL for database needs and RabbitMQ for handling posts, likes, and comments. AWS S3 is also used to
 store images and videos from posts. Okta is used as the identity service. A Docker file is included to Dockerize the
 application.
 
