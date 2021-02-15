@@ -50,7 +50,7 @@ public class UserServiceTest {
         Iterable<User> foundUsers = userService.allUsers();
         User nextUser = foundUsers.iterator().next();
 
-        assertEquals(3, ((Collection<User>) foundUsers).size());
+        assertEquals(2, ((Collection<User>) foundUsers).size());
         assertEquals(userList.get(0), nextUser);
         assertNotEquals(userList.get(1), nextUser);
     }
