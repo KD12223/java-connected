@@ -64,3 +64,4 @@ public class UserServiceTest {
         assertNotEquals(userList.get(0), foundUser);
     }
 }
+
